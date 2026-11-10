@@ -35,17 +35,17 @@
     rev.forEach(function (el) { el.classList.add('visivel'); });
   }
 
-  /* ---------- hero: parallax leve no mouse ---------- */
-  var stack = $('[data-stack]');
-  if (stack && !reduzir && window.matchMedia('(hover:hover)').matches) {
-    var wrap = stack.parentNode;
+  /* ---------- hero: inclinação 3D leve seguindo o mouse (máx. 6deg) ---------- */
+  var placa = $('[data-placa]');
+  if (placa && !reduzir && window.matchMedia('(hover:hover)').matches) {
+    var wrap = placa.parentNode;
     wrap.addEventListener('mousemove', function (e) {
       var r = wrap.getBoundingClientRect();
-      stack.style.setProperty('--mx', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
-      stack.style.setProperty('--my', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
+      placa.style.setProperty('--mx', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
+      placa.style.setProperty('--my', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
     });
     wrap.addEventListener('mouseleave', function () {
-      stack.style.setProperty('--mx', 0); stack.style.setProperty('--my', 0);
+      placa.style.setProperty('--mx', 0); placa.style.setProperty('--my', 0);
     });
   }
 

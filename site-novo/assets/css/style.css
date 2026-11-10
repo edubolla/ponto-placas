@@ -91,13 +91,13 @@ h3{font-size:clamp(21px,2.2vw,26px);line-height:1.2}
 .header.aberto .menu-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
 /* ---------- hero ---------- */
-.hero{--r:1.04;--corte:.7;--topo:230px;position:relative;width:100%;height:calc(100vw*var(--r)*var(--corte) + var(--topo));background:var(--fundo) url(../img/hero-desktop.webp) center var(--topo)/100% auto no-repeat;overflow:clip;display:flex;justify-content:center;padding:clamp(130px,11vw,170px) 0 0}
+.hero{--r:1.04;--corte:.7;--topo:150px;position:relative;width:100%;height:calc(100vw*var(--r)*var(--corte) + var(--topo));background:var(--fundo) url(../img/hero-desktop.webp) center var(--topo)/100% auto no-repeat;overflow:clip;display:flex;justify-content:center;padding:clamp(110px,9vw,140px) 0 0}
 /* contraste do texto (topo escuro) e fusão da base com a próxima seção */
 .hero::before{content:"";position:absolute;inset:0 0 auto 0;height:calc(var(--topo) + 38vw);background:linear-gradient(180deg,var(--fundo) 0,rgba(5,5,11,.9) 30%,rgba(5,5,11,.55) 62%,transparent 100%);pointer-events:none}
 .hero::after{content:"";position:absolute;inset:auto 0 0 0;height:clamp(180px,24vw,420px);background:linear-gradient(180deg,transparent 0,rgba(5,5,11,.7) 55%,var(--fundo) 100%);pointer-events:none}
 .hero__grid{position:relative;z-index:1;width:90%;max-width:1264px;margin:0 auto}
-@media (max-width:1024px){.hero{--r:1.66;--corte:.8;--topo:200px;background-image:url(../img/hero-tablet.webp)}}
-@media (max-width:767px){.hero{--r:2.3;--corte:.92;--topo:370px;background-image:url(../img/hero-mobile.webp);padding-top:120px}}
+@media (max-width:1024px){.hero{--r:1.66;--corte:.8;--topo:0px;background-image:url(../img/hero-tablet.webp)}}
+@media (max-width:767px){.hero{--r:2.3;--corte:.92;--topo:345px;background-image:url(../img/hero-mobile.webp);padding-top:120px}}
 .hero__txt{display:flex;flex-direction:column;align-items:center;text-align:center}
 .hero__txt h1{max-width:15em;text-wrap:balance;overflow-wrap:normal;word-break:normal;hyphens:none}
 .hero__txt .lead{margin:22px auto 0;max-width:600px;font-size:19px}

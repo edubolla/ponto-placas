@@ -63,10 +63,14 @@ a{color:inherit;text-decoration:none}
 .social-btn:hover{border-color:var(--ciano);background:rgba(115,86,202,.3);transform:translateY(-2px)}
 .social-btn:active{transform:scale(.94)}
 .footer{font-size:12px;color:rgba(233,233,233,.55)}
-.wa-btn{position:fixed;right:20px;bottom:24px;z-index:50;width:60px;height:60px;border-radius:50%;background:#128C4B;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(18,140,75,.55);transition:transform .2s,box-shadow .2s}
-.wa-btn svg{width:30px;height:30px}
-.wa-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px -8px rgba(18,140,75,.9)}
+.wa-btn{position:fixed;right:20px;bottom:24px;z-index:50;width:60px;height:60px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;box-shadow:0 6px 24px rgba(0,0,0,.5);transition:transform .2s,box-shadow .2s}
+.wa-btn::before,.wa-btn::after{content:"";position:absolute;inset:0;border-radius:50%;background:#25D366;z-index:-1;animation:wa-pulse 2.4s ease-out infinite}
+.wa-btn::after{animation-delay:1.2s}
+.wa-btn svg{width:32px;height:32px}
+.wa-btn:hover{transform:scale(1.08)}
 .wa-btn:active{transform:scale(.95)}
+@keyframes wa-pulse{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.7);opacity:0}}
+@media (prefers-reduced-motion:reduce){.wa-btn::before,.wa-btn::after{animation:none;opacity:0}}
 @media (max-width:400px){.card-title{font-size:18px}.card--main .card-title{font-size:22px}.card-content{padding:0 16px;gap:12px}.socials{gap:10px}.social-btn{width:52px;height:52px}}
 @media (prefers-reduced-motion:no-preference){
 .logo,.tagline,.card,.divider,.socials,.footer{opacity:0;transform:translateY(14px);animation:entra .6s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i,0)*80ms)}
@@ -145,6 +149,6 @@ a{color:inherit;text-decoration:none}
   <p class="footer" style="--i:9">© 2026 Ponto Placas</p>
 </div>
 
-<a class="wa-btn" href="https://wa.me/555194782751?text=Oi!%20Vim%20pela%20p%C3%A1gina%20de%20links%20e%20quero%20um%20or%C3%A7amento." target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.500 3.500A11.800 11.800 0 0 0 12 0C5.400 0 .1 5.300.1 11.900c0 2.100.5 4.100 1.600 5.900L0 24l6.400-1.700a11.900 11.900 0 0 0 5.600 1.400c6.600 0 11.900-5.300 11.900-11.900 0-3.200-1.200-6.200-3.400-8.300zM12 21.700c-1.800 0-3.500-.5-5-1.400l-.4-.2-3.800 1 1-3.700-.2-.4a9.800 9.800 0 0 1-1.500-5.200C2.100 6.500 6.500 2.100 12 2.100c2.600 0 5.100 1 6.900 2.900a9.700 9.700 0 0 1 2.900 6.900c0 5.400-4.400 9.800-9.800 9.800z"/></svg></a>
+<a class="wa-btn" href="https://wa.me/555194782751?text=Oi!%20Vim%20pela%20p%C3%A1gina%20de%20links%20e%20quero%20um%20or%C3%A7amento." target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><svg viewBox="318 35 646 658" aria-hidden="true"><g transform="translate(0,720) scale(0.1,-0.1)" fill="currentColor"><path d="M6255 6844 c-540 -35 -1107 -229 -1555 -532 -473 -320 -848 -752 -1091 -1256 -133 -276 -216 -536 -273 -856 -43 -240 -52 -602 -22 -880 40 -374 177 -822 362 -1188 l53 -103 -123 -367 c-68 -202 -191 -570 -274 -818 -84 -249 -152 -459 -152 -469 0 -9 13 -22 29 -28 26 -10 29 -14 24 -45 -6 -32 -5 -34 18 -27 41 13 936 298 1314 420 198 63 368 115 378 115 9 0 52 -17 95 -39 366 -184 756 -294 1171 -332 164 -14 498 -7 659 16 954 132 1766 659 2266 1468 163 264 318 632 401 952 79 307 117 688 96 982 -54 781 -356 1473 -881 2017 -509 527 -1157 853 -1895 952 -108 14 -482 26 -600 18z m391 -684 c357 -29 650 -108 959 -259 419 -206 770 -514 1030 -906 200 -301 323 -625 371 -979 23 -168 23 -508 0 -680 -163 -1209 -1161 -2141 -2372 -2217 -427 -26 -824 44 -1212 214 -107 47 -284 143 -339 183 -17 13 -39 24 -49 24 -9 0 -222 -65 -472 -145 -250 -80 -456 -145 -457 -143 -2 2 62 197 141 433 79 237 144 442 144 458 0 16 -18 53 -44 90 -418 599 -554 1426 -351 2127 45 152 82 245 155 390 200 391 505 732 880 982 473 316 1064 472 1616 428z"/><path d="M5323 5236 c-23 -7 -56 -23 -75 -34 -51 -32 -199 -190 -245 -262 -147 -229 -180 -534 -92 -832 67 -225 149 -397 299 -629 190 -292 313 -450 510 -653 296 -305 545 -476 927 -635 282 -118 490 -185 607 -197 81 -8 258 20 362 58 144 52 309 168 373 262 64 96 130 313 138 457 l6 95 -31 36 c-22 24 -112 78 -294 176 -432 232 -487 254 -555 218 -17 -8 -81 -73 -141 -143 -178 -207 -215 -243 -245 -243 -38 0 -287 127 -403 205 -135 92 -223 166 -334 281 -132 137 -275 333 -355 486 l-18 36 72 79 c95 101 134 162 172 268 39 108 37 141 -20 290 -51 133 -92 243 -163 434 -58 157 -101 221 -161 240 -57 17 -287 22 -334 7z"/></g></svg></a>
 </body>
 </html>

@@ -102,6 +102,17 @@ h3{font-size:clamp(21px,2.2vw,26px);line-height:1.2}
 .hero__txt h1{max-width:15em;text-wrap:balance;overflow-wrap:normal;word-break:normal;hyphens:none}
 .hero__txt .lead{margin:22px auto 0;max-width:600px;font-size:19px}
 .hero__cta{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:34px}
+/* desktop: a foto é dimensionada pela altura da tela para as placas caberem na primeira dobra */
+@media (min-width:1025px){
+  .hero{--H:calc(max(100svh,640px)/.66);--W:min(100vw,calc(var(--H)/1.04));height:max(100svh,640px);padding-top:clamp(96px,12svh,130px);
+    background:linear-gradient(90deg,var(--fundo),transparent 14%,transparent 86%,var(--fundo)) center 6svh/var(--W) 100% no-repeat,var(--fundo) url(../img/hero-desktop.webp) center 6svh/var(--W) auto no-repeat}
+  .hero::before{height:46%;background:linear-gradient(180deg,var(--fundo) 0,rgba(5,5,11,.85) 35%,rgba(5,5,11,.4) 75%,transparent 100%)}
+  .hero::after{height:12%}
+  .hero__txt h1{font-size:clamp(40px,min(4.8vw,7svh),68px)}
+  .hero__txt .lead{margin-top:clamp(12px,2.2svh,22px);font-size:clamp(16px,2.1svh,19px)}
+  .hero__cta{margin-top:clamp(18px,3.4svh,34px)}
+  .hero .trust{margin-top:clamp(16px,3.4svh,38px)}
+}
 .trust{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;margin-top:38px;font-size:14px;font-weight:500;color:var(--branco)}
 .trust li{display:flex;align-items:center;gap:8px}
 .trust li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--grad);flex:none}
@@ -254,9 +265,13 @@ h3{font-size:clamp(21px,2.2vw,26px);line-height:1.2}
 .rodape__fim{margin-top:32px;padding-top:20px;border-top:1px solid var(--linha);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 
 /* ---------- whatsapp flutuante ---------- */
-.wa{position:fixed;z-index:90;right:18px;bottom:18px;display:flex;align-items:center;gap:10px;padding:13px 20px 13px 16px;border-radius:999px;background:#128C4B;color:#fff;font-weight:600;font-size:15px;box-shadow:0 12px 30px -10px rgba(0,0,0,.7);transition:transform .25s,box-shadow .25s}
-.wa:hover{transform:translateY(-3px);box-shadow:0 16px 34px -10px rgba(18,140,75,.8)}
-.wa svg{width:24px;height:24px}
+.wa{position:fixed;z-index:90;right:20px;bottom:20px;width:60px;height:60px;display:grid;place-items:center;border-radius:50%;background:#25D366;color:#fff;box-shadow:0 12px 30px -10px rgba(0,0,0,.7);transition:transform .25s,box-shadow .25s}
+.wa::before,.wa::after{content:"";position:absolute;inset:0;border-radius:50%;background:#25D366;z-index:-1;animation:wa-pulse 2.4s ease-out infinite}
+.wa::after{animation-delay:1.2s}
+.wa:hover{transform:scale(1.08);box-shadow:0 16px 34px -10px rgba(37,211,102,.7)}
+.wa svg{width:32px;height:32px}
+@keyframes wa-pulse{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.7);opacity:0}}
+@media (prefers-reduced-motion:reduce){.wa::before,.wa::after{animation:none;opacity:0}}
 
 /* ---------- reveal ---------- */
 .js .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease;transition-delay:var(--d,0s)}

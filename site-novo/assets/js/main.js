@@ -35,20 +35,6 @@
     rev.forEach(function (el) { el.classList.add('visivel'); });
   }
 
-  /* ---------- hero: inclinação 3D leve seguindo o mouse (máx. 6deg) ---------- */
-  var placa = $('[data-placa]');
-  if (placa && !reduzir && window.matchMedia('(hover:hover)').matches) {
-    var wrap = placa.parentNode;
-    wrap.addEventListener('mousemove', function (e) {
-      var r = wrap.getBoundingClientRect();
-      placa.style.setProperty('--mx', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
-      placa.style.setProperty('--my', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
-    });
-    wrap.addEventListener('mouseleave', function () {
-      placa.style.setProperty('--mx', 0); placa.style.setProperty('--my', 0);
-    });
-  }
-
   /* ---------- abas de ocasiões ---------- */
   var tabs = $$('.tabs [role="tab"]');
   function selTab(t, foco) {

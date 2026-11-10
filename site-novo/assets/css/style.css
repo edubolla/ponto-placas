@@ -91,28 +91,20 @@ h3{font-size:clamp(21px,2.2vw,26px);line-height:1.2}
 .header.aberto .menu-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
 /* ---------- hero ---------- */
-.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:130px 0 70px;overflow:clip;background:
-  radial-gradient(60% 50% at 85% 20%,rgba(115,86,202,.35),transparent 70%),
-  radial-gradient(45% 40% at 10% 90%,rgba(211,88,210,.2),transparent 70%),
-  radial-gradient(35% 35% at 70% 95%,rgba(124,237,232,.12),transparent 70%),var(--fundo)}
-.hero__grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
-.hero__txt .lead{margin-top:22px;max-width:540px;font-size:19px}
-.hero__cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
-.trust{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:38px;font-size:14px;font-weight:500;color:var(--branco)}
+.hero{--r:1.04;--corte:.7;--topo:230px;position:relative;width:100%;height:calc(100vw*var(--r)*var(--corte) + var(--topo));background:var(--fundo) url(../img/hero-desktop.webp) center var(--topo)/100% auto no-repeat;overflow:clip;display:flex;justify-content:center;padding:clamp(130px,11vw,170px) 0 0}
+/* contraste do texto (topo escuro) e fusão da base com a próxima seção */
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:calc(var(--topo) + 38vw);background:linear-gradient(180deg,var(--fundo) 0,rgba(5,5,11,.9) 30%,rgba(5,5,11,.55) 62%,transparent 100%);pointer-events:none}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:clamp(180px,24vw,420px);background:linear-gradient(180deg,transparent 0,rgba(5,5,11,.7) 55%,var(--fundo) 100%);pointer-events:none}
+.hero__grid{position:relative;z-index:1;width:90%;max-width:1264px;margin:0 auto}
+@media (max-width:1024px){.hero{--r:1.66;--corte:.8;--topo:200px;background-image:url(../img/hero-tablet.webp)}}
+@media (max-width:767px){.hero{--r:2.3;--corte:.92;--topo:370px;background-image:url(../img/hero-mobile.webp);padding-top:120px}}
+.hero__txt{display:flex;flex-direction:column;align-items:center;text-align:center}
+.hero__txt h1{max-width:15em;text-wrap:balance;overflow-wrap:normal;word-break:normal;hyphens:none}
+.hero__txt .lead{margin:22px auto 0;max-width:600px;font-size:19px}
+.hero__cta{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:34px}
+.trust{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;margin-top:38px;font-size:14px;font-weight:500;color:var(--branco)}
 .trust li{display:flex;align-items:center;gap:8px}
 .trust li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--grad);flex:none}
-/* hero: placa pronta com tilt, halo e reflexo */
-.placa-wrap{perspective:1100px;position:relative;display:flex;justify-content:center}
-.placa{position:relative;width:min(100%,380px);aspect-ratio:388/512;transform-style:preserve-3d;transform:rotateX(calc(var(--my,0)*-6deg)) rotateY(calc(var(--mx,0)*6deg));transition:transform .3s ease-out}
-.placa__halo{position:absolute;inset:-14%;border-radius:50%;background:var(--grad);filter:blur(60px);opacity:.38;z-index:-1}
-.placa__corpo{position:relative;width:100%;height:100%;border-radius:18px;overflow:hidden;border:1px solid rgba(233,233,233,.22);box-shadow:0 40px 70px -24px rgba(0,0,0,.85)}
-.placa__corpo img{width:100%;height:100%;object-fit:cover;display:block}
-.placa__brilho{position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.18) 50%,transparent 60%);transform:translateX(-120%)}
-@media (prefers-reduced-motion:no-preference){
-  .placa__brilho{animation:reflexo 6.5s ease-in-out infinite}
-  @keyframes reflexo{0%,55%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
-}
-
 /* ---------- marquee ---------- */
 .marq{padding:40px 0;border-block:1px solid var(--linha);background:var(--painel);overflow:hidden}
 .marq__trilho{display:flex;gap:16px;width:max-content;animation:marq 90s linear infinite}
@@ -283,8 +275,6 @@ h3{font-size:clamp(21px,2.2vw,26px);line-height:1.2}
   .header.aberto .nav{display:flex}
   .nav a.link{padding:12px 14px;font-size:16px}
   .nav .btn{width:100%;margin-top:6px}
-  .hero{min-height:0;padding-top:120px}
-  .hero__grid{grid-template-columns:minmax(0,1fr);gap:20px}
   .painel-ocasiao{grid-template-columns:minmax(0,1fr)}
   .painel-ocasiao figure{max-height:360px;max-width:272px}
   .prod-grade{grid-template-columns:repeat(2,1fr)}
@@ -311,8 +301,6 @@ h3{font-size:clamp(21px,2.2vw,26px);line-height:1.2}
 }
 
 @media (prefers-reduced-motion:reduce){
-  .placa{transform:none}
-  .placa__brilho{display:none}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
   .js .reveal{opacity:1;transform:none}

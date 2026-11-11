@@ -1,2 +1,28 @@
+# Ponto Placas - https://pontoplacas.com
+# Buscadores e IAs podem ler o site inteiro, exceto a área de homologação.
+
 User-agent: *
 Allow: /
+# Homologação do site novo: o conteúdo final fica na raiz (evita conteúdo duplicado)
+Disallow: /site-novo/
+
+# Buscadores e assistentes de IA, liberados explicitamente
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: Google-Extended
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Applebot
+User-agent: Applebot-Extended
+User-agent: Meta-ExternalAgent
+User-agent: DuckAssistBot
+Allow: /
+Disallow: /site-novo/
+
+Sitemap: https://pontoplacas.com/sitemap.xml

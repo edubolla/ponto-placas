@@ -40,6 +40,7 @@
 
 - Prazo: é combinado no orçamento, porque depende da demanda e da complexidade da peça.
 - Frete: envio para todo o Brasil; o valor depende do destino e do volume e entra no orçamento.
+- Quantidade mínima: 10 placas por pedido.
 - Arte: não é preciso ter a arte pronta; a equipe cria a partir do logo, dos textos e das referências.
 - Envio ao premiado: sim, com nome e endereço de quem recebe, e rastreamento.
 

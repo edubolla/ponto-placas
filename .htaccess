@@ -1,11 +1,45 @@
 # ---------------------------------------------------------------------------
-# Hostinger (Apache / LiteSpeed) - hospedagem compartilhada
-# Suba o CONTEÚDO desta pasta para public_html. Na Vercel este arquivo é ignorado.
+# Ponto Placas - Hostinger (Apache / LiteSpeed)
+# Suba o CONTEÚDO de deploy/public_html para public_html. Na Vercel este arquivo é ignorado.
 # ---------------------------------------------------------------------------
 
 DirectoryIndex index.html
 Options -Indexes
+AddDefaultCharset UTF-8
 ErrorDocument 404 /404.html
+
+# HTTPS e "sem www": a própria Hostinger já redireciona (conferido em 2026-11-12:
+# http:// e www. respondem 301 para https://pontoplacas.com/). Não repetir aqui:
+# atrás do CDN da Hostinger a regra abaixo pode entrar em loop de redirecionamento.
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Uma URL por página: /index.html e /pasta/index.html viram / e /pasta/
+  RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
+
+  # Endereço de homologação do site novo
+  RewriteRule ^site-novo/?(.*)$ /$1 [R=301,L]
+
+  # URLs do WordPress antigo que o Google conhece
+  RewriteRule ^wp-sitemap.*\.xml$ /sitemap.xml [R=301,L]
+  RewriteRule ^(hello-world|category|author|tag|feed|comments)(/.*)?$ / [R=301,L]
+
+  # Restos do WordPress: respondem 410 (removido de vez), mesmo que os arquivos ainda estejam no servidor.
+  # Se precisar entrar no wp-admin para um backup, comente a linha abaixo antes.
+  RewriteRule ^(wp-admin|wp-includes|wp-content|wp-json)(/.*)?$ - [G,L]
+  RewriteRule ^(wp-[a-z-]+|xmlrpc)\.php$ - [G,L]
+</IfModule>
+
+# Arquivos que não devem ser servidos
+<FilesMatch "(^\.|\.(md|py|sh|zip|log|sql|bak)$)">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+</FilesMatch>
 
 # Tipos que servidores mais antigos podem não conhecer
 <IfModule mod_mime.c>
@@ -14,37 +48,37 @@ ErrorDocument 404 /404.html
   AddType image/svg+xml .svg
   AddType application/xml .xml
   AddType text/plain .txt
-  AddCharset UTF-8 .html .txt .xml .css .js
+  AddCharset UTF-8 .html .txt .xml .css .js .svg
 </IfModule>
 
 # Compressão
 <IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/css text/plain application/javascript application/xml image/svg+xml
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/javascript application/javascript application/json application/xml image/svg+xml
 </IfModule>
 
-# Cache do navegador (os arquivos de /assets mudam pouco)
+# Cache do navegador. CSS e JS levam ?v=N no HTML, então podem ficar mais tempo.
 <IfModule mod_expires.c>
   ExpiresActive On
+  ExpiresDefault "access plus 1 day"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/xml "access plus 1 hour"
+  ExpiresByType text/plain "access plus 1 hour"
   ExpiresByType image/webp "access plus 1 month"
   ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType image/svg+xml "access plus 1 month"
   ExpiresByType font/woff2 "access plus 1 year"
-  ExpiresByType text/css "access plus 1 week"
-  ExpiresByType application/javascript "access plus 1 week"
-  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
 </IfModule>
 
 <IfModule mod_headers.c>
   Header set X-Content-Type-Options "nosniff"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Strict-Transport-Security "max-age=31536000" env=HTTPS
   <FilesMatch "\.(woff2)$">
     Header set Access-Control-Allow-Origin "*"
   </FilesMatch>
 </IfModule>
-
-# Forçar HTTPS: ative só depois de confirmar que o SSL do domínio está ativo.
-# <IfModule mod_rewrite.c>
-#   RewriteEngine On
-#   RewriteCond %{HTTPS} off
-#   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
-# </IfModule>

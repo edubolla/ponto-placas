@@ -12,6 +12,10 @@
  *   scroll          GA               percent_scrolled (50, 75, 100)
  *   scroll_depth    dataLayer        percent_scrolled (50, 75, 100)
  *   link_click      GA e dataLayer   link_name, link_url, link_position, link_type (página de links)
+ *   saida_<rede>    GA e dataLayer   social_network, button_location, link_url
+ *                   (saida_instagram, saida_tiktok, saida_youtube, saida_pinterest, saida_linkedin,
+ *                   saida_facebook): clique para uma rede social em qualquer página. Na página de
+ *                   links o mesmo clique gera também o link_click (são eventos diferentes, não duplicam).
  *   Todo push do dataLayer leva também os UTMs e IDs de clique (ver atribuicao.js);
  *   o whatsapp_click leva ainda lead_ref e event_id.
  *   page_view       GA automático pelo gtag config; o GTM usa o próprio acionador de página.
@@ -23,7 +27,7 @@
 
   var pagina = document.body.getAttribute('data-pagina') || 'home';
   // chaves zeradas em todo push, para o GTM não herdar valores do evento anterior
-  var CHAVES = ['button_location', 'button_text', 'button_context', 'link_name', 'link_url', 'link_position', 'link_type', 'percent_scrolled', 'lead_ref', 'event_id'];
+  var CHAVES = ['button_location', 'button_text', 'button_context', 'link_name', 'link_url', 'link_position', 'link_type', 'percent_scrolled', 'lead_ref', 'event_id', 'social_network'];
 
   function limpar(txt) {
     return (txt || '').replace(/\s+/g, ' ').trim().slice(0, 100);
@@ -47,6 +51,21 @@
     return /(^https?:\/\/)?(wa\.me|api\.whatsapp\.com|web\.whatsapp\.com)\//i.test(href || '');
   }
 
+  // rede social de destino do link (ou null)
+  var REDES = [
+    ['instagram', /(^|\.)instagram\.com$/i],
+    ['tiktok', /(^|\.)tiktok\.com$/i],
+    ['youtube', /(^|\.)(youtube\.com|youtu\.be)$/i],
+    ['pinterest', /(^|\.)pinterest\.[a-z.]+$|^pin\.it$/i],
+    ['linkedin', /(^|\.)linkedin\.com$/i],
+    ['facebook', /(^|\.)(facebook\.com|fb\.com|fb\.me)$/i]
+  ];
+  function redeSocial(a) {
+    var host = a.hostname || '';
+    for (var i = 0; i < REDES.length; i++) if (REDES[i][1].test(host)) return REDES[i][0];
+    return null;
+  }
+
   // onde o botão está na página
   function localDoBotao(a) {
     if (a.hasAttribute('data-local')) return a.getAttribute('data-local');
@@ -54,6 +73,7 @@
     if (a.closest('header')) return 'header';
     if (a.closest('footer')) return 'rodape';
     if (a.closest('.links')) return 'cards_links';
+    if (a.closest('.socials')) return 'icones_links';
     var sec = a.closest('section[id]');
     if (sec && sec.id === 'inicio') return 'hero';
     return sec ? sec.id : 'pagina';
@@ -69,7 +89,7 @@
 
   function nomeDoLink(a) {
     if (a.classList.contains('social-btn')) return 'Ícone ' + limpar((a.getAttribute('aria-label') || '').replace(/ da Ponto Placas$/, ''));
-    var t = a.querySelector('.card-title');
+    var t = a.querySelector('.card-title, strong');
     return limpar(t ? t.textContent : a.textContent) || limpar(a.getAttribute('aria-label'));
   }
 
@@ -95,6 +115,17 @@
         link_url: href,
         link_position: pos >= 0 ? pos + 1 : undefined,
         link_type: tipoDoLink(a)
+      });
+    }
+
+    // saída para rede social: um evento por rede, para virar conversão separada se quiser
+    var rede = redeSocial(a);
+    if (rede) {
+      enviar('saida_' + rede, 'saida_' + rede, {
+        social_network: rede,
+        button_location: localDoBotao(a),
+        button_text: nomeDoLink(a),
+        link_url: href
       });
     }
 

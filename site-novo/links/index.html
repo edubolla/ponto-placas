@@ -90,6 +90,9 @@ a{color:inherit;text-decoration:none}
 @media (prefers-reduced-motion:no-preference){
 .logo,.tagline,.card,.divider,.socials,.footer{opacity:0;transform:translateY(14px);animation:entra .6s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i,0)*80ms)}
 @keyframes entra{to{opacity:1;transform:none}}
+/* brilho passando no card principal (mesmo efeito do Green Week da Belnic) */
+.card--main::after{content:"";position:absolute;inset:0 auto 0 0;width:35%;z-index:3;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);transform:translateX(-120%) skewX(-20deg);animation:brilho 5s ease-in-out 1.5s infinite;pointer-events:none}
+@keyframes brilho{0%,75%{transform:translateX(-120%) skewX(-20deg)}100%{transform:translateX(320%) skewX(-20deg)}}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>

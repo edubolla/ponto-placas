@@ -121,7 +121,7 @@
     lbMostra(); lb.hidden = false; d.body.style.overflow = 'hidden';
     $('.lb__fechar', lb).focus();
   }
-  function lbFecha() { lb.hidden = true; d.body.style.overflow = ''; lbImg.src = ''; if (ultimoFoco) ultimoFoco.focus(); }
+  function lbFecha() { lb.hidden = true; d.body.style.overflow = ''; lbImg.removeAttribute('src'); if (ultimoFoco) ultimoFoco.focus(); }
   function lbNav(s) { idx = (idx + s + lista.length) % lista.length; lbMostra(); }
   $$('#gal button').forEach(function (b) { b.addEventListener('click', function () { lbAbre(b); }); });
   $('.lb__fechar', lb).addEventListener('click', lbFecha);

@@ -64,6 +64,32 @@ def legado(origem, destino, pagina, prefixo):
     destino.write_text(s)
 
 
+def copiar_legado_usado():
+    """Copia para assets-legado/ só o que as páginas antigas usam.
+    Arquivo idêntico ao do site novo é apontado para /assets/ em vez de copiado."""
+    import filecmp
+    paginas = [SAIDA / 'ponto-hub' / 'index.html', SAIDA / 'termos-de-uso-e-politica-de-privacidade' / 'index.html', SAIDA / '404.html']
+    usados = set()
+    for html in paginas:
+        s = html.read_text()
+        def troca(m):
+            rel = m.group(2)
+            novo = SAIDA / 'assets' / rel
+            if novo.exists() and filecmp.cmp(novo, RAIZ / 'assets' / rel, shallow=False):
+                return m.group(1) + 'assets/' + rel
+            usados.add(rel)
+            return m.group(0)
+        s = re.sub(r'((?:\.\./|/))assets-legado/([^"?#)]+)', troca, s)
+        html.write_text(s)
+    css = (RAIZ / 'assets' / 'css' / 'style.css').read_text()
+    usados.add('css/style.css')
+    usados.update(re.findall(r'url\(["\']?\.\./([^)"\'?#]+)', css))
+    for rel in sorted(usados):
+        destino = SAIDA / 'assets-legado' / rel
+        destino.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(RAIZ / 'assets' / rel, destino)
+
+
 def conferir():
     """Todo href/src local precisa existir na pasta final."""
     erros = []
@@ -97,15 +123,20 @@ def main():
     (SAIDA / 'links' / 'index.html').write_text(links)
 
     # páginas do site anterior
-    shutil.copytree(RAIZ / 'assets', SAIDA / 'assets-legado', ignore=IGNORAR)
     legado(RAIZ / 'ponto-hub' / 'index.html', SAIDA / 'ponto-hub' / 'index.html', 'ponto-hub', '../')
     t = 'termos-de-uso-e-politica-de-privacidade'
     legado(RAIZ / t / 'index.html', SAIDA / t / 'index.html', 'termos', '../')
     legado(RAIZ / '404.html', SAIDA / '404.html', '404', '/')
 
+    copiar_legado_usado()
+
+    # imagem de compartilhamento do Ponto Hub (o og:image aponta para /assets/img/)
+    shutil.copy(RAIZ / 'assets' / 'img' / 'og-ponto-hub.png', SAIDA / 'assets' / 'img' / 'og-ponto-hub.png')
+
     # indexação e servidor
     for nome in ('robots.txt', 'llms.txt', '.htaccess'):
         shutil.copy(RAIZ / nome, SAIDA / nome)
+    shutil.copy(NOVO / 'favicon.ico', SAIDA / 'favicon.ico')  # pedido automático de navegadores e do Google
     robots = (SAIDA / 'robots.txt').read_text()
     robots = re.sub(r'# Homologação[^\n]*\n', '', robots)
     robots = robots.replace('Disallow: /site-novo/\n', '').replace(', exceto a área de homologação', '')

@@ -12,6 +12,8 @@
  *   scroll          GA               percent_scrolled (50, 75, 100)
  *   scroll_depth    dataLayer        percent_scrolled (50, 75, 100)
  *   link_click      GA e dataLayer   link_name, link_url, link_position, link_type (página de links)
+ *   Todo push do dataLayer leva também os UTMs e IDs de clique (ver atribuicao.js);
+ *   o whatsapp_click leva ainda lead_ref e event_id.
  *   page_view       GA automático pelo gtag config; o GTM usa o próprio acionador de página.
  */
 (function () {
@@ -21,7 +23,7 @@
 
   var pagina = document.body.getAttribute('data-pagina') || 'home';
   // chaves zeradas em todo push, para o GTM não herdar valores do evento anterior
-  var CHAVES = ['button_location', 'button_text', 'button_context', 'link_name', 'link_url', 'link_position', 'link_type', 'percent_scrolled'];
+  var CHAVES = ['button_location', 'button_text', 'button_context', 'link_name', 'link_url', 'link_position', 'link_type', 'percent_scrolled', 'lead_ref', 'event_id'];
 
   function limpar(txt) {
     return (txt || '').replace(/\s+/g, ' ').trim().slice(0, 100);
@@ -32,6 +34,11 @@
     if (evDL) {
       var msg = { event: evDL, page_type: pagina };
       CHAVES.forEach(function (k) { msg[k] = params.hasOwnProperty(k) ? params[k] : undefined; });
+      // UTMs e IDs de clique (atribuicao.js) acompanham todo evento do dataLayer
+      if (window.ppAtribuicao) {
+        var atrib = window.ppAtribuicao.dados();
+        for (var k in atrib) if (atrib.hasOwnProperty(k)) msg[k] = atrib[k];
+      }
       window.dataLayer.push(msg);
     }
   }
@@ -92,12 +99,19 @@
     }
 
     if (ehWhatsApp(href)) {
-      enviar('whatsapp_click', 'whatsapp_click', {
+      var info = {
         button_location: localDoBotao(a),
         button_text: nomeDoLink(a),
         button_context: contexto(a),
         link_url: href
-      });
+      };
+      // protocolo do lead e event_id; pode também gravar o protocolo na mensagem
+      if (window.ppAtribuicao) {
+        var lead = window.ppAtribuicao.cliqueWhatsApp(a, info);
+        info.lead_ref = lead.lead_ref;
+        info.event_id = lead.event_id;
+      }
+      enviar('whatsapp_click', 'whatsapp_click', info);
     }
   }, true);
 
